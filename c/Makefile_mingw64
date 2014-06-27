@@ -1,0 +1,11 @@
+# @brief   cp1252_escape Makefile for MinGW-w64/TDM64 (build 32bit binary).
+# @author  eel3
+# @date    2014/06/23
+#
+# @note
+# - TDM-GCC 4.8.1 (64bit) + Cygwin 1.7.28 on Windows 7 64bit SP1
+
+CC         := gcc
+CFLAGS      = -finput-charset=cp932 -m32
+
+include ./Makefile
