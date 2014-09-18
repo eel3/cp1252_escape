@@ -2,7 +2,7 @@
 /**
  * @brief   Command line tool to escape characters greater than 0x7F.
  * @author  eel3
- * @date    2013/01/10
+ * @date    2014/09/18
  *
  * @par Compilers
  * - TDM-GCC 4.8.1 (Windows 7 64bit SP1)
@@ -12,13 +12,13 @@
 /* ********************************************************************** */
 
 
-#if defined(WIN32) || defined(WIN64)
+#if defined(_WIN32) || defined(_WIN64)
 #	if !defined(__MINGW32__) && !defined(__MINGW64__)
 #		ifndef _CRT_SECURE_NO_WARNINGS
 #			define _CRT_SECURE_NO_WARNINGS
 #		endif /* ndef _CRT_SECURE_NO_WARNINGS */
 #	endif /* !defined(__MINGW32__) && !defined(__MINGW64__) */
-#endif /* defined(WIN32) || defined(WIN64) */
+#endif /* defined(_WIN32) || defined(_WIN64) */
 
 #include <assert.h>
 #include <errno.h>
@@ -32,11 +32,11 @@
 /* ---------------------------------------------------------------------- */
 
 /** File separator */
-#if defined(WIN32) || defined(WIN64)
+#if defined(_WIN32) || defined(_WIN64)
 #	define  PATH_SEP  '\\'
-#else /* defined(WIN32) || defined(WIN64) */
+#else /* defined(_WIN32) || defined(_WIN64) */
 #	define  PATH_SEP  '/'
-#endif /* defined(WIN32) || defined(WIN64) */
+#endif /* defined(_WIN32) || defined(_WIN64) */
 
 
 /* ---------------------------------------------------------------------- */
