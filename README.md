@@ -1,5 +1,5 @@
-cp1252_escape
-=============
+cp1252\_escape
+==============
 
 Command line tool to escape 8bit characters greater than 0x7F.
 
@@ -13,7 +13,7 @@ Target environments
 
 Windows.
 
-cp1252_escape is written in ANSI C89 and Go 1.3, and so probably works fine on other OS.
+cp1252\_escape is written in ANSI C89 and Go 1.3, and so probably works fine on other OS.
 
 Set up
 ------
