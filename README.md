@@ -13,7 +13,7 @@ Target environments
 
 Windows.
 
-Probably is works fine on other OS.
+Probably it works fine on other OS.
 
 Set up
 ------
