@@ -18,7 +18,9 @@ Probably is works fine on other OS.
 Set up
 ------
 
-For ANSI C89 implementation:
+cp1252\_escape is written in several programming languages. Choose one among them.
+
+### For ANSI C89 implementation:
 
 1. Compile escape.c. Use make and Makefile.
 2. Put escape in a directory registered in PATH.
@@ -31,7 +33,7 @@ For ANSI C89 implementation:
 | MinGW-w64/TDM64-GCC (32bit binary) | Makefile\_mingw64\_32bit |
 | Microsoft Visual C++ (with NMAKE)  | Makefile\_vc\_nmake      |
 
-For Go 1.3 implementation:
+### For Go 1.3 implementation:
 
 1. Install [Go](https://golang.org/ "Official website") 1.3 or later.
 2. Compile escape.go (`go build escape.go`).
