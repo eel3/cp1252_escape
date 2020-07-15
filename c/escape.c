@@ -2,7 +2,7 @@
 /**
  * @brief   Command line tool to escape characters greater than 0x7F.
  * @author  eel3
- * @date    2014/09/18
+ * @date    2020/06/21
  *
  * @par Compilers
  * - TDM-GCC 4.8.1 (Windows 7 64bit SP1)
@@ -37,6 +37,14 @@
 #else /* defined(_WIN32) || defined(_WIN64) */
 #	define  PATH_SEP  '/'
 #endif /* defined(_WIN32) || defined(_WIN64) */
+
+
+/* ---------------------------------------------------------------------- */
+/* Variable */
+/* ---------------------------------------------------------------------- */
+
+/** The program name. */
+static const char *program_name;
 
 
 /* ---------------------------------------------------------------------- */
@@ -82,6 +90,20 @@ static const char *my_basename(const char * const name)
 
 /* ====================================================================== */
 /**
+ * @brief  Show usage,
+ *
+ * @param[in,out] *out  Output stream.
+ */
+/* ====================================================================== */
+static void usage(FILE * const out)
+{
+	assert(out != NULL);
+
+	(void) fprintf(out, "usage: %s [-h] [file ...]\n", program_name);
+}
+
+/* ====================================================================== */
+/**
  * @brief  Escape characters greater than 0x7F.
  *
  * @param[in,out] *in   input stream
@@ -115,11 +137,35 @@ int main(int argc, char *argv[])
 {
 	int retval;
 
-	if ((argc == 2)
-	    && (STREQ(argv[1], "-h") || STREQ(argv[1], "--help")))
-	{
-		(void) fprintf(stderr, "usage: %s [file ...]\n", my_basename(argv[0]));
-		return EXIT_FAILURE;
+	program_name = my_basename(argv[0]);
+
+	for (; (argc > 1) && (argv[1][0] == '-') && (argv[1][1] != '\0'); argc--, argv++) {
+		const char *p = &argv[1][1];
+
+		if (argv[1][1] == '-') {
+			p = &argv[1][2];
+
+			if (*p == '\0') {
+				argc--, argv++;
+				break;
+			} else if (STREQ(p, "help")) {
+				usage(stdout);
+				return EXIT_SUCCESS;
+			} else {
+				usage(stderr);
+				return EXIT_FAILURE;
+			}
+			continue;
+		}
+
+		do switch (*p) {
+		case 'h':
+			usage(stdout);
+			return EXIT_SUCCESS;
+		default:
+			usage(stderr);
+			return EXIT_FAILURE;
+		} while (*++p != '\0');
 	}
 
 	retval = EXIT_SUCCESS;
