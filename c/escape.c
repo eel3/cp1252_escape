@@ -99,7 +99,7 @@ static void usage(FILE * const out)
 {
 	assert(out != NULL);
 
-	(void) fprintf(out, "usage: %s [-hv] [file ...]\n", program_name);
+	(void) fprintf(out, "usage: %s [-hv] [-o output] [file ...]\n", program_name);
 }
 
 /* ====================================================================== */
@@ -145,9 +145,13 @@ static void do_escape(FILE *in, FILE *out)
 /* ********************************************************************** */
 int main(int argc, char *argv[])
 {
+	const char *output;
+	FILE *out;
 	int retval;
 
 	program_name = my_basename(argv[0]);
+
+	output = "-";
 
 	for (; (argc > 1) && (argv[1][0] == '-') && (argv[1][1] != '\0'); argc--, argv++) {
 		const char *p = &argv[1][1];
@@ -161,6 +165,14 @@ int main(int argc, char *argv[])
 			} else if (STREQ(p, "help")) {
 				usage(stdout);
 				return EXIT_SUCCESS;
+			} else if (STREQ(p, "output")) {
+				if (argc < 3) {
+					usage(stderr);
+					return EXIT_FAILURE;
+				} else {
+					argc--, argv++;
+					output = argv[1];
+				}
 			} else if (STREQ(p, "version")) {
 				version();
 				return EXIT_SUCCESS;
@@ -175,6 +187,18 @@ int main(int argc, char *argv[])
 		case 'h':
 			usage(stdout);
 			return EXIT_SUCCESS;
+		case 'o':
+			if (p[1] != '\0') {
+				output = &p[1];
+				p += strlen(output);
+			} else if (argc < 3) {
+				usage(stderr);
+				return EXIT_FAILURE;
+			} else {
+				argc--, argv++;
+				output = argv[1];
+			}
+			break;
 		case 'v':
 			version();
 			return EXIT_SUCCESS;
@@ -184,10 +208,19 @@ int main(int argc, char *argv[])
 		} while (*++p != '\0');
 	}
 
+	if (STREQ(output, "-")) {
+		out = stdout;
+	} else if (errno = 0, (out = fopen(output, "w")) == NULL) {
+		perror(output);
+		return EXIT_FAILURE;
+	} else {
+		/*EMPTY*/
+	}
+
 	retval = EXIT_SUCCESS;
 
 	if (argc <= 1) {
-		do_escape(stdin, stdout);
+		do_escape(stdin, out);
 	} else {
 		int i;
 		FILE *in;
@@ -203,12 +236,16 @@ int main(int argc, char *argv[])
 				/*EMPTY*/
 			}
 
-			do_escape(in, stdout);
+			do_escape(in, out);
 
 			if (in != stdin) {
 				(void) fclose(in);
 			}
 		}
+	}
+
+	if (out != stdout) {
+		(void) fclose(out);
 	}
 
 	return retval;
